@@ -55,6 +55,8 @@ mdurl==0.1.2
     # via markdown-it-py
 orjson==3.10.9
     # via fastapi
+pillow==11.0.0
+    # via eventpix-api
 pydantic==2.9.2
     # via fastapi
     # via pydantic-extra-types

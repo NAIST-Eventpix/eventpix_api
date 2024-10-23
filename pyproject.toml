@@ -5,6 +5,7 @@ description = "Add your description here"
 authors = [{ name = "take0x" }]
 dependencies = [
     "fastapi[all]>=0.115.2",
+    "pillow>=11.0.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
