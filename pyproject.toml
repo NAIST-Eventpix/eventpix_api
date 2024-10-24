@@ -3,10 +3,7 @@ name = "eventpix-api"
 version = "0.1.0"
 description = "Add your description here"
 authors = [{ name = "take0x" }]
-dependencies = [
-    "fastapi[all]>=0.115.2",
-    "pillow>=11.0.0",
-]
+dependencies = ["fastapi[all]>=0.115.2", "pillow>=11.0.0"]
 readme = "README.md"
 requires-python = ">= 3.8"
 
@@ -19,7 +16,7 @@ managed = true
 dev-dependencies = ["mypy>=1.12.1", "ruff>=0.7.0"]
 
 [tool.rye.scripts]
-server = { cmd = "uvicorn eventpix_api.main:app --host 0.0.0.0 --reload" }
+server = { cmd = "uvicorn eventpix_api.main:app --host 0.0.0.0 --port 8080 --reload" }
 
 [tool.hatch.metadata]
 allow-direct-references = true
