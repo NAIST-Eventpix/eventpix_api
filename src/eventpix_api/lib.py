@@ -5,7 +5,7 @@ from typing import Any
 from dotenv import load_dotenv
 from openai import OpenAI
 
-SAMPLE_MODE = True
+SAMPLE_MODE = False
 
 PROMPT = """\
 画像に含まれる予定情報から「summary」、「description」、「dtstart」、「dtend」、「location」を読み取ってください。
