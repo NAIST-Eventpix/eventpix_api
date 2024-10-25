@@ -20,5 +20,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build . -t eventpix.azurecr.io/eventpix-api:${{ github.sha }}     
-          docker push eventpix.azurecr.io/eventpix-api:${{ github.sha }}
+          docker build . -t eventpix.azurecr.io/eventpix-api:latest
+          docker push eventpix.azurecr.io/eventpix-api:latest
