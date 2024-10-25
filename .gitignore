@@ -8,3 +8,8 @@ wheels/
 
 # venv
 .venv
+
+# IDE files
+.vscode/
+
+.env
