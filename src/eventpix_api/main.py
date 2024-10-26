@@ -1,7 +1,9 @@
+import json
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse, Response
-import json
-from eventpix_api.lib import pick_schedule_from_image, json_to_ics
+
+from eventpix_api.lib import json_to_ics, pick_schedule_from_image
 
 app = FastAPI()
 
@@ -29,7 +31,7 @@ async def convert_json_to_ics(file: UploadFile = File(...)) -> Response:
         ics_content = json_to_ics(events)
         return Response(
             content=ics_content,
-            media_type='text/calendar',
+            media_type="text/calendar",
         )
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
