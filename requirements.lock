@@ -17,9 +17,14 @@ anyio==4.6.2.post1
     # via openai
     # via starlette
     # via watchfiles
+cachetools==5.5.0
+    # via google-auth
 certifi==2024.8.30
     # via httpcore
     # via httpx
+    # via requests
+charset-normalizer==3.4.0
+    # via requests
 click==8.1.7
     # via typer
     # via uvicorn
@@ -33,11 +38,31 @@ fastapi==0.115.2
     # via eventpix-api
 fastapi-cli==0.0.5
     # via fastapi
+google-api-core==2.21.0
+    # via google-api-python-client
+google-api-python-client==2.149.0
+    # via eventpix-api
+google-auth==2.35.0
+    # via eventpix-api
+    # via google-api-core
+    # via google-api-python-client
+    # via google-auth-httplib2
+    # via google-auth-oauthlib
+google-auth-httplib2==0.2.0
+    # via eventpix-api
+    # via google-api-python-client
+google-auth-oauthlib==1.2.1
+    # via eventpix-api
+googleapis-common-protos==1.65.0
+    # via google-api-core
 h11==0.14.0
     # via httpcore
     # via uvicorn
 httpcore==1.0.6
     # via httpx
+httplib2==0.22.0
+    # via google-api-python-client
+    # via google-auth-httplib2
 httptools==0.6.4
     # via uvicorn
 httpx==0.27.2
@@ -49,6 +74,7 @@ idna==3.10
     # via anyio
     # via email-validator
     # via httpx
+    # via requests
 itsdangerous==2.2.0
     # via fastapi
 jinja2==3.1.4
@@ -61,12 +87,25 @@ markupsafe==3.0.2
     # via jinja2
 mdurl==0.1.2
     # via markdown-it-py
+oauthlib==3.2.2
+    # via requests-oauthlib
 openai==1.52.2
     # via eventpix-api
 orjson==3.10.9
     # via fastapi
 pillow==11.0.0
     # via eventpix-api
+proto-plus==1.25.0
+    # via google-api-core
+protobuf==5.28.3
+    # via google-api-core
+    # via googleapis-common-protos
+    # via proto-plus
+pyasn1==0.6.1
+    # via pyasn1-modules
+    # via rsa
+pyasn1-modules==0.4.1
+    # via google-auth
 pydantic==2.9.2
     # via fastapi
     # via openai
@@ -80,6 +119,8 @@ pydantic-settings==2.6.0
     # via fastapi
 pygments==2.18.0
     # via rich
+pyparsing==3.2.0
+    # via httplib2
 python-dateutil==2.9.0.post0
     # via icalendar
 python-dotenv==1.0.1
@@ -90,8 +131,16 @@ python-multipart==0.0.12
 pyyaml==6.0.2
     # via fastapi
     # via uvicorn
+requests==2.32.3
+    # via eventpix-api
+    # via google-api-core
+    # via requests-oauthlib
+requests-oauthlib==2.0.0
+    # via google-auth-oauthlib
 rich==13.9.2
     # via typer
+rsa==4.9
+    # via google-auth
 shellingham==1.5.4
     # via typer
 six==1.16.0
@@ -116,6 +165,10 @@ tzdata==2024.2
     # via icalendar
 ujson==5.10.0
     # via fastapi
+uritemplate==4.1.1
+    # via google-api-python-client
+urllib3==2.2.3
+    # via requests
 uvicorn==0.32.0
     # via fastapi
     # via fastapi-cli
