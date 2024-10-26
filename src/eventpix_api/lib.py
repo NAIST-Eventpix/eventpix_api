@@ -4,6 +4,8 @@ from typing import Any
 
 from dotenv import load_dotenv
 from openai import OpenAI
+from icalendar import Calendar, Event
+from datetime import datetime
 
 SAMPLE_MODE = False
 
@@ -79,3 +81,20 @@ def pick_schedule_from_image(image: bytes) -> Any:
 
     except Exception as e:
         return {"error": str(e)}
+
+def json_to_ics(json_data: Any) -> str:
+    if isinstance(json_data, str):
+        json_data = json.loads(json_data)
+    if not isinstance(json_data, list):
+        raise ValueError("JSON data must be a list of events")
+    cal = Calendar()
+    for item in json_data:
+        event = Event()
+        event.add('summary', item.get('summary', ''))
+        event.add('description', item.get('description', ''))
+        event.add('dtstart', datetime.strptime(item.get('dtstart', ''), "%Y-%m-%dT%H:%M:%S"))
+        event.add('dtend', datetime.strptime(item.get('dtend', ''), "%Y-%m-%dT%H:%M:%S"))
+        event.add('location', item.get('location', ''))
+        cal.add_component(event)
+    return cal.to_ical().decode('utf-8')
+
