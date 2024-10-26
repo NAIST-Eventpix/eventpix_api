@@ -9,14 +9,6 @@ from openai import OpenAI
 
 SAMPLE_MODE = False
 
-PROMPT = """\
-画像に含まれる予定情報から「summary」、「description」、「dtstart」、「dtend」、「location」を読み取ってください。
-返却形式はJSONで、valueにevents、keyに予定情報の配列を持つオブジェクトを返してください。
-複数ある場合は配列に新たな要素として追加します。
-読み取れない項目がある場合、そのvalueは空にしてください。
-画像に予定情報が含まれない場合はerrorを返してください。\
-"""
-
 SAMPLE_RESULT = """\
 [
     {
@@ -39,6 +31,18 @@ SAMPLE_RESULT = """\
 load_dotenv(override=True)
 
 
+def _load_prompt() -> str:
+    now = datetime.now()
+    date = now.strftime("%m/%d")
+    return f"""\
+画像に含まれる予定情報から「summary」、「description」、「dtstart」、「dtend」、「location」を読み取ってください。
+予定情報に年がなく月日のみ含まれる場合、月日が{date}より前なら{now.year+1}を、{date}以降なら{now.year}を年として設定してください。
+返却形式はJSONで、valueにevents、keyに予定情報の配列を持つオブジェクトを返してください。
+複数ある場合は配列に新たな要素として追加します。
+読み取れない項目がある場合、そのvalueは空にしてください。
+画像に予定情報が含まれない場合はerrorを返してください。"""
+
+
 def pick_schedule_from_image(image: bytes) -> Any:
     try:
         if SAMPLE_MODE:
@@ -47,6 +51,7 @@ def pick_schedule_from_image(image: bytes) -> Any:
         base64_image = b64encode(image).decode("utf-8")
 
         client = OpenAI()
+        prompt = _load_prompt()
         res = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -55,7 +60,7 @@ def pick_schedule_from_image(image: bytes) -> Any:
                     "content": [
                         {
                             "type": "text",
-                            "text": PROMPT,
+                            "text": prompt,
                         },
                         {
                             "type": "image_url",
