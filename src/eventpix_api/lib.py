@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any
 
 from dotenv import load_dotenv
-from icalendar import Calendar, Event
+from icalendar import Calendar, Event  # type:ignore[import-untyped]
 from openai import OpenAI
 
 SAMPLE_MODE = False
@@ -101,4 +101,4 @@ def json_to_ics(json_data: Any) -> str:
         )
         event.add("location", item.get("location", ""))
         cal.add_component(event)
-    return cal.to_ical().decode("utf-8")
+    return str(cal.to_ical().decode("utf-8"))
