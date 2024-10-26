@@ -9,14 +9,6 @@ from openai import OpenAI
 
 SAMPLE_MODE = False
 
-PROMPT = """\
-画像に含まれる予定情報から「summary」、「description」、「dtstart」、「dtend」、「location」を読み取ってください。
-返却形式はJSONで、valueにevents、keyに予定情報の配列を持つオブジェクトを返してください。
-複数ある場合は配列に新たな要素として追加します。
-読み取れない項目がある場合、そのvalueは空にしてください。
-画像に予定情報が含まれない場合はerrorを返してください。\
-"""
-
 SAMPLE_RESULT = """\
 [
     {
