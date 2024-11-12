@@ -1,11 +1,12 @@
 import json
 from base64 import b64encode
 from datetime import datetime
-from typing import Any
+from typing import Any, Iterable
 
 from dotenv import load_dotenv
 from icalendar import Calendar, Event  # type:ignore[import-untyped]
 from openai import OpenAI
+from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
 
 SAMPLE_MODE = False
 
@@ -43,47 +44,60 @@ def _load_prompt() -> str:
 画像に予定情報が含まれない場合はerrorを返してください。"""
 
 
-def pick_schedule_from_image(image: bytes) -> Any:
+def _call_openai_api(
+    prompt: str, messages: Iterable[ChatCompletionMessageParam]
+) -> Any:
+    client = OpenAI()
+    res = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=messages,
+        response_format={"type": "json_object"},
+        temperature=0.0,
+    )
+    content = res.choices[0].message.content
+    if content is None:
+        raise ValueError("ChatGPT response is None")
+    return json.loads(content)
+
+
+def pick_schedule_from_text(text: str) -> Any:
+    if SAMPLE_MODE:
+        return json.loads(SAMPLE_RESULT)
     try:
-        if SAMPLE_MODE:
-            return json.loads(SAMPLE_RESULT)
-
-        base64_image = b64encode(image).decode("utf-8")
-
-        client = OpenAI()
         prompt = _load_prompt()
-        res = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": prompt,
-                        },
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{base64_image}",
-                            },
-                        },
-                    ],
-                },
-            ],
-            response_format={"type": "json_object"},
-            temperature=0.0,
-        )
+        messages: Iterable[ChatCompletionMessageParam] = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "text", "text": text},
+                ],
+            }
+        ]
+        return _call_openai_api(prompt, messages)
+    except Exception as e:
+        return {"error": str(e)}
 
-        content = res.choices[0].message.content
 
-        if content is None:
-            raise ValueError("ChatGPT response is None")
-
-        result_json = json.loads(content)
-
-        return result_json
-
+def pick_schedule_from_image(image: bytes) -> Any:
+    if SAMPLE_MODE:
+        return json.loads(SAMPLE_RESULT)
+    try:
+        base64_image = b64encode(image).decode("utf-8")
+        prompt = _load_prompt()
+        messages: Iterable[ChatCompletionMessageParam] = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                    },
+                ],
+            }
+        ]
+        return _call_openai_api(prompt, messages)
     except Exception as e:
         return {"error": str(e)}
 
