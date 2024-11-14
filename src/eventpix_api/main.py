@@ -2,10 +2,19 @@ import json
 
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse, Response
+from pydantic import BaseModel
 
-from eventpix_api.lib import json_to_ics, pick_schedule_from_image
+from eventpix_api.lib import (
+    json_to_ics,
+    pick_schedule_from_image,
+    pick_schedule_from_text,
+)
 
 app = FastAPI()
+
+
+class TextInput(BaseModel):
+    text: str
 
 
 @app.get("/")
@@ -18,6 +27,16 @@ async def api_pick_schedule_from_image(file: UploadFile = File(...)) -> JSONResp
     try:
         contents = await file.read()
         return JSONResponse(content=pick_schedule_from_image(contents))
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+@app.post("/pick_schedule_from_text")
+async def api_pick_schedule_from_text(input: TextInput) -> JSONResponse:
+    try:
+        text = input.text
+        schedule = pick_schedule_from_text(text)
+        return JSONResponse(content=schedule)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
