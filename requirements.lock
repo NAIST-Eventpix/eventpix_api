@@ -23,6 +23,10 @@ certifi==2024.8.30
 click==8.1.7
     # via typer
     # via uvicorn
+colorama==0.4.6
+    # via click
+    # via tqdm
+    # via uvicorn
 distro==1.9.0
     # via openai
 dnspython==2.7.0
@@ -119,8 +123,6 @@ ujson==5.10.0
 uvicorn==0.32.0
     # via fastapi
     # via fastapi-cli
-uvloop==0.21.0
-    # via uvicorn
 watchfiles==0.24.0
     # via uvicorn
 websockets==13.1
